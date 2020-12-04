@@ -1,11 +1,10 @@
 import * as React from 'react';
 import {defaultOwner, Owner} from "../../model/Owner";
-import {OwnerService} from "../../service/OwnerService";
-import './ListOwner.css';
+import {ApiServiceOwner} from "../../service/ApiServiceOwner";
 import {EditOwner} from "./EditOwner";
 import {Columns, DataGrid, ValueFormatterParams} from '@material-ui/data-grid';
 import {injectIntl, WrappedComponentProps} from 'react-intl'
-import {Button, IconButton} from "@material-ui/core";
+import {IconButton} from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -23,7 +22,7 @@ interface State {
 
 class ListOwner extends React.Component<Props, State> {
 	public readonly state: State;
-	api = new OwnerService();
+	api = new ApiServiceOwner();
 
 	columns: Columns = [];
 
@@ -56,11 +55,11 @@ class ListOwner extends React.Component<Props, State> {
 		this.setState({selectedOwner: defaultOwner(), add: true});
 	}
 
-	delete(name: string) {
-		this.api.delete(name)
+	delete(id: number) {
+		this.api.delete(id)
 			.then(() => {
 				this.setState({message: 'Owner deleted successfully.'});
-				this.setState({owners: this.state.owners.filter(owner => owner.name !== name)});
+				this.setState({owners: this.state.owners.filter(owner => owner.id !== id)});
 			})
 	}
 
@@ -88,22 +87,31 @@ class ListOwner extends React.Component<Props, State> {
 	public render() {
 		const {intl} = this.props;
 		this.columns = [
-			{field: 'name', headerName: intl.formatMessage({id: 'owner.name'}), width: 150},
-			{field: '', renderCell: (params: ValueFormatterParams) => (
-				<div>
-					<IconButton aria-label="add" onClick={() => this.edit(params.data as Owner)}><EditIcon/></IconButton>
-					<IconButton aria-label="add" onClick={() => this.delete((params.data as Owner).name)}><DeleteIcon/></IconButton>
-				</div>
-				), disableClickEventBubbling: true,  width: 170}
+			{field: 'name', headerName: intl.formatMessage({id: 'owner.name'}), flex: 1},
+			{
+				field: '', renderCell: (params: ValueFormatterParams) => (
+					<div>
+						<IconButton aria-label="edit" onClick={() => this.edit(params.data as Owner)}>
+							<EditIcon/>
+						</IconButton>
+						<IconButton aria-label="delete" onClick={() => this.delete((params.data as Owner).id)}>
+							<DeleteIcon/>
+						</IconButton>
+					</div>
+				), disableClickEventBubbling: true, width: 128
+			}
 		];
 
 		return (
 			<React.Fragment>
-				<IconButton aria-label="add" color="primary" onClick={() => this.add()}><AddCircleOutlineIcon/></IconButton>
+				<IconButton aria-label="add" color="primary" onClick={() => this.add()}>
+					<AddCircleOutlineIcon/>
+				</IconButton>
 				<div style={{height: 400, width: '100%'}}>
 					<DataGrid rows={this.state.owners} columns={this.columns} pageSize={5}/>
 				</div>
-				<EditOwner edit={this.state.edit} add={this.state.add} owner={{...this.state.selectedOwner}} onClose={t => this.handleSaveOwner(t)}/>
+				<EditOwner edit={this.state.edit} add={this.state.add} owner={{...this.state.selectedOwner}}
+						   onClose={t => this.handleSaveOwner(t)}/>
 			</React.Fragment>
 		);
 	}

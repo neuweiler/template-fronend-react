@@ -3,18 +3,18 @@ import {Owner} from "../model/Owner";
 
 const OWNER_API_BASE_URL = 'http://localhost:8081/owner'; //TODO use env specific URLs
 
-export class OwnerService {
+export class ApiServiceOwner {
 
     fetch() {
         return axios.get(OWNER_API_BASE_URL);
     }
 
-    fetchDetails(name: string) {
-        return axios.get(OWNER_API_BASE_URL + '/' + name);
+    fetchDetails(id: number) {
+        return axios.get(OWNER_API_BASE_URL + '/' + id);
     }
 
-    delete(name: string) {
-        return axios.delete(OWNER_API_BASE_URL + '/' + name);
+    delete(id: number) {
+        return axios.delete(OWNER_API_BASE_URL + '/' + id);
     }
 
     add(owner: Owner) {

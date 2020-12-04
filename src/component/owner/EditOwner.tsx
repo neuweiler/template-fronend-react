@@ -30,7 +30,7 @@ export const EditOwner: React.FC<Props> = ({owner, edit, add, onClose}) => {
 				<TextField
 					autoFocus
 					id="name"
-					label="Name"
+					label={translate({id: 'owner.name'})}
 					type="text"
 					defaultValue={owner.name}
 					onChange={(e) => owner.name = e.target.value}
@@ -39,10 +39,10 @@ export const EditOwner: React.FC<Props> = ({owner, edit, add, onClose}) => {
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={handleCancel} color="secondary">
-					Cancel
+					{translate({id: 'cancel'})}
 				</Button>
 				<Button onClick={handleSave} color="primary" type="submit">
-					Save
+					{translate({id: 'save'})}
 				</Button>
 			</DialogActions>
 		</Dialog>

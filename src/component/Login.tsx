@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, TextField} from "@material-ui/core";
 import {UserCredentials} from "../model/UserCredentials";
 import AuthenticationService from "../service/AuthenticationService";
+import translate from "../i18n/translate";
 
 type Props = {
 	onLogin(): void;
@@ -29,19 +30,19 @@ const Login: React.FC<Props> = ({onLogin}) => {
 			<TextField
 				autoFocus
 				id="username"
-				label="Username"
+				label={translate({id: 'username'})}
 				type="text"
 				onChange={(e) => setUsername(e.target.value)}
 			/>
 			<br/>
 			<TextField
 				id="password"
-				label="Password"
+				label={translate({id: 'password'})}
 				type="password"
 				onChange={(e) => setPassword(e.target.value)}
 			/>
 			<br/>
-			<Button onClick={login} color="primary">Login</Button>
+			<Button onClick={login} color="primary">{translate({id: 'login'})}</Button>
 		</div>
 	);
 };

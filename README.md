@@ -18,3 +18,4 @@ The template includes:
 ToDo:
 * graphQL integration
 * replace hardcoded URLs with stage dependant variables
+* input vaildation
