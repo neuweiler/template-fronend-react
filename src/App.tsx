@@ -2,12 +2,11 @@ import React, {useState} from "react";
 import I18nProvider from "./i18n/i18nProvider";
 import {LOCALES} from "./i18n/locales";
 import AppRouter from "./AppRouter";
-import {Button, Container, Link, Typography} from "@material-ui/core";
+import {Container, Link, Typography} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import translate from "./i18n/translate";
-import {FormattedDate} from "react-intl";
 import Login from "./component/Login";
 import AuthenticationService from "./service/AuthenticationService";
+import MenuAppBar from "./component/MenuAppBar";
 
 const Copyright: React.FC = () => (
 	<Typography variant="body2" color="textSecondary" align="center">
@@ -27,23 +26,14 @@ const App: React.FC = () => {
 
 	const handleLogout = () => {
 		AuthenticationService.logout();
+		setDummy(dummy + 1); // redraw component
 	}
 
 	return (
 		<I18nProvider locale={locale}>
 			<Container maxWidth="xl">
-				<Button onClick={() => setLocale(LOCALES.ENGLISH)}>English</Button>
-				<Button onClick={() => setLocale(LOCALES.GERMAN)}>Deutsch</Button>
-				<Button onClick={() => setLocale(LOCALES.FRENCH)}>Fran&ccedil;ais</Button>
-				<Button onClick={() => setLocale(LOCALES.ITALIAN)}>Italiano</Button>
-				{userLoggedIn && <Button onClick={() => handleLogout}>{translate({id: 'logout'})}</Button>}
+				<MenuAppBar userLoggedIn={userLoggedIn} onLogout={handleLogout} onLocaleChange={setLocale}/>
 				<Box my={4}>
-					<Typography variant="h4" component="h1" gutterBottom>
-						{translate({
-							id: 'title',
-							value: {time: <FormattedDate value={new Date()} year="numeric" month="long" day="2-digit"/>}
-						})}
-					</Typography>
 
 					{userLoggedIn && <AppRouter/>}
 					{!userLoggedIn && <Login onLogin={handleLogin}/>}
